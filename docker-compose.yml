@@ -1,0 +1,35 @@
+# Docker Compose version
+version: "3.8"
+
+# Define all containers to run
+services:
+
+  # PostgreSQL with pgVector pre-installed
+  postgres:
+
+    # Special image that includes pgVector extension
+    image: pgvector/pgvector:pg16
+
+    # Fixed name for our container
+    container_name: agentdesk_postgres
+
+    # Environment variables passed into container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: agentdesk
+
+    # Map container port 5432 to local machine port 5432
+    ports:
+      - "5433:5432"
+
+    # Persistent storage so data survives container restarts
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    # Auto restart if container crashes
+    restart: unless-stopped
+
+# Declare the named volume at project level
+volumes:
+  postgres_data:
